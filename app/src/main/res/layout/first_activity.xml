@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="动态部署" />
+
+        <Button
+            android:id="@+id/dexpatch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="dexpatch" />
+
+        <Button
+            android:id="@+id/roolback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="回滚" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="firstBundle" />
+
+        <Button
+            android:id="@+id/install_firstBundle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="安装firstBundle" />
+
+
+        <Button
+            android:id="@+id/open_firstBundle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="打开firstBundle" />
+
+        <Button
+            android:id="@+id/uninstall_firstBundle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="卸载firstBundle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="secondBundle" />
+
+        <Button
+            android:id="@+id/install_secondBundle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="安装secondBundle" />
+
+
+        <Button
+            android:id="@+id/open_secondBundle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="打开secondBundle" />
+
+        <Button
+            android:id="@+id/uninstall_secondBundle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="卸载secondBundle" />
+
+
+    </LinearLayout>
+</ScrollView>

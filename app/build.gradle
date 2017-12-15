@@ -1,0 +1,143 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.taobao.atlas'
+apply from: 'dexPatchWraper.gradle'
+
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+
+version = getEnvValue("versionName", "1.0.0")
+//atlas维护仓库版本
+group = "com.v.mlr"
+def apVersion = getEnvValue("apVersion", "")
+
+android {
+
+    compileSdkVersion 22
+    buildToolsVersion '25.0.2'
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 1
+        versionName version
+        applicationId group
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi', 'x86'//, 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+
+
+
+    }
+
+
+}
+
+
+repositories {
+    flatDir {
+        dirs 'libs' //this way we can find the .aar file in libs folder
+    }
+}
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile(rootProject.ext.lib_atlas_core) {
+        transitive = true
+    }
+    compile rootProject.ext.lib_atlas_update
+
+    bundleCompile project(':firstbundle')
+    bundleCompile project(':secondbundle')
+
+    compile 'com.alibaba:fastjson:1.2.23@jar'
+
+}
+
+atlas {
+
+    atlasEnabled true
+    tBuildConfig {
+        outOfApkBundles = ['firstbundle','secondbundle']
+    }
+
+    manifestOptions {
+        addAtlasProxyComponents true
+    }
+
+
+    patchConfigs {
+        debug {
+            createTPatch true
+        }
+    }
+
+    buildTypes {
+        debug {
+            if (apVersion) {
+                baseApDependency "${group}:AP-debug:${apVersion}@ap"
+                patchConfig patchConfigs.debug
+            }
+        }
+    }
+}
+
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+publishing {
+    repositories {
+        maven {
+            url "../repo"
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifact "${project.buildDir}/outputs/apk/app-debug.ap"
+            artifactId "AP-debug"
+        }
+    }
+}
+
+String getEnvValue(key, defValue) {
+    def val = System.getProperty(key)
+    if (null != val) {
+        return val
+    }
+    val = System.getenv(key)
+    if (null != val) {
+        return val
+    }
+    return defValue
+}
+
+
+tasks.whenTaskAdded { task ->
+    if (task.name.contains("DebugAndroidTest")) {
+        task.setEnabled(false);
+    }
+    if (task.name.contains("assemble")) {
+        def files = null;
+        def file = new File(task.project.getBuildDir(), "outputs");
+        if (file.exists() && new File(file, "tpatch-debug").exists()) {
+            files = new File(file, "tpatch-debug").listFiles();
+        }
+        if (files != null) {
+            for (File file1 : files) {
+                if (file1.getName().endsWith(".json") || file1.getName().endsWith(".tpatch")) {
+
+                    if (!new File(task.project.getRootDir(), "hisTpatch").exists()) {
+                        new File(task.project.getRootDir(), "hisTpatch").mkdirs();
+                    }
+                    org.apache.commons.io.FileUtils.copyFileToDirectory(file1, new File(task.project.getRootDir(), "hisTpatch"));
+                }
+            }
+        }
+    }
+}
