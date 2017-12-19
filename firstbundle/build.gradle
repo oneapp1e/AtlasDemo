@@ -5,7 +5,10 @@ apply plugin: 'com.taobao.atlas'
 
 atlas.bundleConfig.awbBundle = true
 
-version = '1.0.1'
+Properties properties = new Properties()
+properties.load(project.rootProject.file('atlas.properties').newDataInputStream())
+
+version = properties.getProperty("firstbundleVersion")
 
 android {
     compileSdkVersion 22
@@ -17,7 +20,6 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName version
-
 
     }
 

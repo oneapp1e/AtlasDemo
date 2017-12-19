@@ -2,6 +2,9 @@ package bm.hd.mlr.secondbundle;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.taobao.atlas.remote.IRemote;
+import android.taobao.atlas.remote.IRemoteTransactor;
+import android.util.Log;
 import android.widget.TextView;
 
 /**

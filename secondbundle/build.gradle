@@ -4,7 +4,10 @@ apply plugin: 'com.taobao.atlas'
 
 atlas.bundleConfig.awbBundle = true
 
-version = '1.0.1'
+Properties properties = new Properties()
+properties.load(project.rootProject.file('atlas.properties').newDataInputStream())
+
+version = properties.getProperty("secondbundleVersion")
 
 android {
     compileSdkVersion 22
@@ -31,5 +34,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    providedCompile rootProject.ext.lib_atlas_core
 }
 

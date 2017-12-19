@@ -3,17 +3,23 @@ apply plugin: 'com.taobao.atlas'
 apply from: 'dexPatchWraper.gradle'
 
 
-def releaseTime() {
-    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
-}
+Properties properties = new Properties()
+properties.load(project.rootProject.file('atlas.properties').newDataInputStream())
 
-version = getEnvValue("versionName", "1.0.0")
+version = getEnvValue("versionName", properties.getProperty("hostVersion"))
 //atlas维护仓库版本
 group = "com.v.mlr"
 def apVersion = getEnvValue("apVersion", "")
 
 android {
-
+    signingConfigs {
+        release {
+            keyAlias 'atlas'
+            keyPassword 'mlr2017'
+            storeFile file('atlas.jks')
+            storePassword 'mlr2017'
+        }
+    }
     compileSdkVersion 22
     buildToolsVersion '25.0.2'
     defaultConfig {
@@ -28,10 +34,15 @@ android {
         }
 
 
-
     }
+    buildTypes {
+        debug {
 
-
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
 }
 
 
@@ -61,7 +72,7 @@ atlas {
 
     atlasEnabled true
     tBuildConfig {
-        outOfApkBundles = ['firstbundle','secondbundle']
+        outOfApkBundles = ['secondbundle']//'firstbundle',
     }
 
     manifestOptions {
@@ -77,6 +88,12 @@ atlas {
 
     buildTypes {
         debug {
+            if (apVersion) {
+                baseApDependency "${group}:AP-debug:${apVersion}@ap"
+                patchConfig patchConfigs.debug
+            }
+        }
+        release {
             if (apVersion) {
                 baseApDependency "${group}:AP-debug:${apVersion}@ap"
                 patchConfig patchConfigs.debug
