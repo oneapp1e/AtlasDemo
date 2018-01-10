@@ -2,6 +2,7 @@
     package="bm.hd.mlr.firstbundle">
 
     <application
+        android:name="bm.hd.mlr.firstbundle.FirstApplication"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true">

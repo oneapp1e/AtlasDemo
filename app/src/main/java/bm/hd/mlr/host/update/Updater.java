@@ -206,12 +206,11 @@
  *
  */
 
-package bm.hd.mlr.firstbundle.update;
+package bm.hd.mlr.host.update;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.taobao.atlas.versionInfo.BaselineInfoManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -228,8 +227,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import bm.hd.mlr.firstbundle.MainActivity;
 
 /**
  * Created by wuzhong on 2016/12/20.

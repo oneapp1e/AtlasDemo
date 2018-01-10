@@ -54,16 +54,13 @@ repositories {
 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile(rootProject.ext.lib_atlas_core) {
         transitive = true
     }
     compile rootProject.ext.lib_atlas_update
-
     bundleCompile project(':firstbundle')
     bundleCompile project(':secondbundle')
-
     compile 'com.alibaba:fastjson:1.2.23@jar'
 
 }
@@ -72,7 +69,7 @@ atlas {
 
     atlasEnabled true
     tBuildConfig {
-        outOfApkBundles = ['secondbundle']//'firstbundle',
+        outOfApkBundles = ['firstbundle','secondbundle']//
     }
 
     manifestOptions {
@@ -139,11 +136,15 @@ tasks.whenTaskAdded { task ->
     if (task.name.contains("DebugAndroidTest")) {
         task.setEnabled(false);
     }
-    if (task.name.contains("assemble")) {
+
+    if (task.name == "assembleDebug" || task.name == "assembleRelease") {
+
+        boolean debug = task.name.contains("Debug")
+
         def files = null;
         def file = new File(task.project.getBuildDir(), "outputs");
-        if (file.exists() && new File(file, "tpatch-debug").exists()) {
-            files = new File(file, "tpatch-debug").listFiles();
+        if (file.exists() && new File(file, "tpatch-" + (debug ? "debug" : "release")).exists()) {
+            files = new File(file, "tpatch-" + (debug ? "debug" : "release")).listFiles();
         }
         if (files != null) {
             for (File file1 : files) {
@@ -156,5 +157,24 @@ tasks.whenTaskAdded { task ->
                 }
             }
         }
+
+        task.doLast {
+
+            String path = rootProject.projectDir.path + "/app/build/outputs/remote-bundles-" + (debug ? "debug" : "release") + "/libbm_hd_mlr_secondbundle.so"
+            File pathFile = new File(path.replace('/', File.separator))
+
+            def baomanVersion = properties.getProperty("secondbundleVersion")
+            String wrapFilePath = "${rootProject.projectDir.path}/app/build/outputs/remote-bundles-" + (debug ? "debug" : "release") + "/libbm_hd_mlr_secondbundle_" + baomanVersion + ".so"
+
+            File wrapFile = new File(wrapFilePath.replace('/', File.separator))
+
+            if (pathFile.exists()) {
+                org.apache.commons.io.FileUtils.copyFile(pathFile, wrapFile)
+                pathFile.delete()
+            }
+
+        }
+
     }
 }
+

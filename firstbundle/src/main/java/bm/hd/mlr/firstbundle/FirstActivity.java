@@ -1,17 +1,7 @@
 package bm.hd.mlr.firstbundle;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.taobao.atlas.framework.Atlas;
-import android.taobao.atlas.remote.HostTransactor;
-import android.taobao.atlas.remote.IRemote;
-import android.taobao.atlas.remote.IRemoteTransactor;
-import android.taobao.atlas.remote.RemoteActivityManager;
-import android.taobao.atlas.remote.RemoteFactory;
-import android.taobao.atlas.remote.transactor.RemoteTransactor;
-import android.taobao.atlas.util.AtlasCrashManager;
-import android.util.Log;
 import android.widget.TextView;
 
 import butterknife.BindView;
